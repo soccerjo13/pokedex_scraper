@@ -50,6 +50,21 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
         display_pokemon_info(poke_array, with_image)
     end
 
+    def list_of_nesting(value = true)
+        results = []
+        @pokedex.each do |pokemon|
+            if pokemon.nests? == value
+                results << pokemon
+            end
+        end
+        list_pokemon_names(results)
+    end
+
+    def list_pokemon_names(list = @pokedex)
+        list.map do |pokemon|
+            pokemon.name.capitalize
+        end.join('\n')
+    end
+
     scraper = Scraper.new
-    binding.pry
 end
