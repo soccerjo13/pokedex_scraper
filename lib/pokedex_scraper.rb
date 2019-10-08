@@ -3,7 +3,7 @@ require 'Nokogiri'
 require 'Pry'
 require_relative 'pokemon.rb'
 
-class Scraper
+class PokedexScraper
 
 attr_accessor :pokedex_page
 attr_accessor :pokedex
