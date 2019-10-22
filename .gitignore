@@ -6,6 +6,18 @@
 /pkg/
 /spec/reports/
 /tmp/
+/.bundle/
+/.yardoc
+/Gemfile.lock
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+.idea
+.DS_Store
+
 
 # rspec failure tracking
 .rspec_status
