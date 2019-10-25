@@ -1,6 +1,5 @@
 require 'HTTParty'
 require 'Nokogiri'
-require 'Pry'
 require_relative 'pokemon.rb'
 
 class PokedexScraper
