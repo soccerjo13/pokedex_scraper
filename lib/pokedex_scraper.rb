@@ -65,6 +65,4 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
             pokemon.name.capitalize
         end.join('\n')
     end
-
-    scraper = Scraper.new
 end
