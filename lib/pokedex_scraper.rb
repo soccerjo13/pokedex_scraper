@@ -21,11 +21,11 @@ attr_accessor :pokedex
         poke_array = @pokedex.find_all do |pokemon|
             pokemon.name.include?(sanitized_name)
         end
-        poke_array.count > 0 ? poke_array : "#{name} not found"
+        poke_array.count > 0 ? poke_array : nil
     end
 
     def display_pokemon_info(poke_array, with_image)
-        unless poke_array.is_a?(String)
+        unless poke_array.nil?
             poke_array.map do |pokemon|
                 if pokemon.released?
                 "#{pokemon.name.gsub('-', ' ').capitalize} #{pokemon.dex_number}
@@ -40,7 +40,7 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
                 end
             end
         else
-            [poke_array]
+            ['No pokemon found']
         end
     end
 
