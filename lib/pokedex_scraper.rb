@@ -28,7 +28,7 @@ attr_accessor :pokedex
         unless poke_array.is_a?(String)
             poke_array.map do |pokemon|
                 if pokemon.released?
-                "#{pokemon.name.capitalize} #{pokemon.dex_number}
+                "#{pokemon.name.gsub('-', ' ').capitalize} #{pokemon.dex_number}
 Currently Available: #{pokemon.available?}
 Can be shiny: #{pokemon.shiny_available?}
 Currently available as shadow: #{pokemon.shadow_available?}
@@ -40,7 +40,7 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
                 end
             end
         else
-            poke_array
+            [poke_array]
         end
     end
 
