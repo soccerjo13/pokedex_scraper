@@ -1,8 +1,8 @@
 class Pokemon
 
-    attr_accessor :number
-    alias :dex_number :number
-    alias :pokedex_number :number
+    attr_accessor :dex_number
+    alias :number :dex_number
+    alias :pokedex_number :dex_number
 
     attr_accessor :nests
     alias :nests? :nests
