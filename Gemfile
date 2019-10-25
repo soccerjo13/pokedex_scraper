@@ -1,3 +1,3 @@
 source 'https://rubygems.org'
-gem 'nokogiri'
-gem 'httparty'
+
+gemspec name: 'pokedex_scraper'
