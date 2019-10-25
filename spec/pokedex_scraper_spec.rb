@@ -14,6 +14,6 @@ describe PokedexScraper do
     fake_pokemon = 'baloney'
     pokemon = scraper.find_and_display_pokemon(fake_pokemon)
     expect(pokemon).to be_a(Array)
-    expect(pokemon[0]).to eq("#{fake_pokemon} not found")
+    expect(pokemon[0]).to eq("No pokemon found")
   end
 end
