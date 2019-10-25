@@ -1,5 +1,6 @@
-require "bundler/setup"
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require "pokedex_scraper"
+=begin
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -12,3 +13,4 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+=end
