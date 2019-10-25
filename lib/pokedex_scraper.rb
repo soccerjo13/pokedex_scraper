@@ -36,7 +36,7 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
                 else
                     "#{pokemon.name.capitalize} #{pokemon.dex_number}
                     Has not been released in Pokemon Go
-                    " + with_image ? "\n#{pokemon.image}" : ''
+                    " + (with_image ? "\n#{pokemon.image}" : '')
                 end
             end
         else
