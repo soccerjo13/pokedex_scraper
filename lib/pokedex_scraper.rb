@@ -1,27 +1,42 @@
 require 'HTTParty'
 require 'Nokogiri'
-require 'pokedex_scraper/pokemon.rb'
+require 'pokedex_scraper/silph_mon.rb'
+require 'pokedex_scraper/gg_mon.rb'
 
 class PokedexScraper
 
 attr_accessor :pokedex_page
-attr_accessor :pokedex
+attr_accessor :silph_dex
 
     def initialize
-        doc ||= HTTParty.get('https://thesilphroad.com/catalog#')
-        @pokedex_page ||= Nokogiri::HTML(doc)
+        silph_doc ||= HTTParty.get('https://thesilphroad.com/catalog#')
+        @pokedex_page ||= Nokogiri::HTML(silph_doc)
 
-        @pokedex ||= @pokedex_page.css('div#content').css('.tab-pane').css('.pokemonOption').map do |pokemon|
-            Pokemon.new(pokemon)
+        @silph_dex ||= @pokedex_page.css('div#content').css('.tab-pane').css('.pokemonOption').map do |pokemon|
+            SilphMon.new(pokemon)
+        end
+
+        gamepress_doc ||= HTTParty.get('https://gamepress.gg/pokemongo/pokemon-go-shinies-list')
+        @shiny_page ||= Nokogiri::HTML(gamepress_doc)
+
+        @gg_dex = @shiny_page.css('tbody').map do |pokemon|
+            GGMon.new(pokemon)
         end
     end
 
     def find_pokemon_by_name(name)
         sanitized_name = name.gsub(/[^a-zA-Z]+/, '-').downcase
-        poke_array = @pokedex.find_all do |pokemon|
+        poke_array = @silph_dex.find_all do |pokemon|
             pokemon.name.include?(sanitized_name)
         end
         poke_array.count > 0 ? poke_array : nil
+    end
+
+    def find_pokemon_by_number(number)
+        int_num = number.to_i
+        poke_array = @silph_dex.find_all do |pokemon|
+            pokemon.dex_number == int_num
+        end
     end
 
     def display_pokemon_info(poke_array, with_image)
@@ -51,7 +66,7 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
 
     def list_of_nesting(value = true)
         results = []
-        @pokedex.each do |pokemon|
+        @silph_dex.each do |pokemon|
             if pokemon.nests? == value
                 results << pokemon
             end
@@ -59,7 +74,7 @@ Can nest: #{pokemon.nests?}" + (with_image ? "\n#{pokemon.image}" : '')
         list_pokemon_names(results)
     end
 
-    def list_pokemon_names(list = @pokedex)
+    def list_pokemon_names(list = @silph_dex)
         list.map do |pokemon|
             pokemon.name.capitalize
         end.join('\n')
