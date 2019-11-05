@@ -2,6 +2,9 @@ require 'pokedex_scraper/pokemon'
 
 class SilphMon < Pokemon
 
+  attr_accessor :dex_number
+  alias :number :dex_number
+
   attr_accessor :nests
   alias :nests? :nests
   alias :nesting? :nests
@@ -36,6 +39,21 @@ class SilphMon < Pokemon
   attr_accessor :image
   alias :picture :image
 
+  attr_accessor :number_with_form
+
+  @silph_forms = {
+    'plant' => '',
+    'overcast' => '',
+    'altered' => 'altered',
+    'land' => '',
+    'normal' => '',
+    'red' => '',
+    'spring' => '',
+    'incarnate' => '',
+    'aria' => '',
+    'alola' => 'alola'
+  }
+
   def initialize(pokemon)
     attributes = pokemon.attributes
     @dex_number = pokemon.children.text.gsub('#', '').to_i
@@ -50,15 +68,22 @@ class SilphMon < Pokemon
     @pokemon_slug = attributes['data-pokemon-slug'].value
     @image = pokemon['style'][/https.+png/]
     @form = parse_form(@pokemon_slug)
-    @number_with_form = "#{@dex_number}-#{@form}"
+    @number_with_form = "#{@dex_number}-#{standardize_form(@form)}"
   end
 
   def parse_form(slug)
     slug_arr = slug.split('-')
     if slug_arr.count() > 1
-      puts "#{slug}: #{slug_arr.last}"
+      slug_arr.drop(1)
     else
       nil
+    end
+
+    def standardize_form(form)
+      unless form.nil?
+        #binding.pry
+        #@silph_forms[form]
+      end
     end
 =begin
     burmy-plant: plant
