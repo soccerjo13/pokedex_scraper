@@ -97,7 +97,6 @@ class SilphMon < Pokemon
   end
 
   def parse_form(slug)
-    #binding.pry
     slug_arr = slug.split('-')
     if slug_arr.count() > 1
       slug_arr.drop(1).join('-')
