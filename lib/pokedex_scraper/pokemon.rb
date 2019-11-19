@@ -9,6 +9,8 @@ class Pokemon
 
     attr_accessor :number_with_form
 
+    attr_accessor :name
+
     def to_bool(value)
         if value == '1'
             true

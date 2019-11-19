@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe PokedexScraper do
 
-  scraper = PokedexScraper.new
+  scraper = PokedexScraper::PokedexScraper.new
 
   it "finds and displays a single pokemon" do
     pokemon = scraper.find_and_display_pokemon('squirtle')
@@ -39,5 +39,11 @@ describe PokedexScraper do
     pokemon = scraper.find_and_display_pokemon('audino', true)
     expect(pokemon).to be_a(Array)
     expect(pokemon.length).to be 1
+  end
+
+  it "finds a pokemon by number" do
+    pokemon = scraper.find_pokemon_by_number('42')
+    puts pokemon
+    expect(scraper.display_pokemon_info(pokemon, false).length).to be 1
   end
 end

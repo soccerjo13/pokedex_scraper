@@ -2,9 +2,6 @@ require 'pokedex_scraper/pokemon'
 
 class SilphMon < Pokemon
 
-  attr_accessor :dex_number
-  alias :number :dex_number
-
   attr_accessor :nests
   alias :nests? :nests
   alias :nesting? :nests
@@ -25,6 +22,7 @@ class SilphMon < Pokemon
 
   attr_accessor :shiny_released
   alias :shiny_ever_available? :shiny_released
+  alias :shiny_released? :shiny_released
 
   attr_accessor :shadow_available
   alias :shadow_available? :shadow_available
@@ -33,58 +31,88 @@ class SilphMon < Pokemon
   attr_accessor :shadow_released
   alias :shadow_ever_available? :shadow_released
 
-  attr_accessor :pokemon_slug
-  alias :name :pokemon_slug
-
   attr_accessor :image
   alias :picture :image
 
-  attr_accessor :number_with_form
-
-  @silph_forms = {
-    'plant' => '',
-    'overcast' => '',
+  SILPH_FORMS = {
+    'plant' => 'plant', #not in gg yet
+    'overcast' => 'overcast', #not in gg yet
     'altered' => 'altered',
-    'land' => '',
-    'normal' => '',
-    'red' => '',
-    'spring' => '',
-    'incarnate' => '',
-    'aria' => '',
+    'land' => 'land', #not in gg yet
+    'normal' => 'normal', #not in gg yet
+    'red' => 'red', #not in gg yet
+    'spring' => 'spring', #not in gg yet
+    'incarnate' => 'incarnate', #not in gg yet
+    'aria' => 'aria', #not in gg yet
     'alola' => 'alola'
   }
 
+  ATTRIBUTE_HEADERS = [
+    'dex_number',
+    'form',
+    'number_with_form',
+    'name',
+    'released',
+    'obtainable',
+    'nests',
+    'raid_boss',
+    'shiny_released',
+    'shiny_obtainable',
+    'shadow_released',
+    'shadow_available',
+    'image'
+  ]
+
   def initialize(pokemon)
-    attributes = pokemon.attributes
-    @dex_number = pokemon.children.text.gsub('#', '').to_i
-    @nests = to_bool(attributes['data-nests'].value)
-    @raid_boss = to_bool(attributes['data-raid-boss'].value)
-    @obtainable = to_bool(attributes['data-obtainable'].value)
-    @released = to_bool(attributes['data-released'].value)
+    attributes        = pokemon.attributes
+    @dex_number       = pokemon.children.text.gsub('#', '').to_i
+    @nests            = to_bool(attributes['data-nests'].value)
+    @raid_boss        = to_bool(attributes['data-raid-boss'].value)
+    @obtainable       = to_bool(attributes['data-obtainable'].value)
+    @released         = to_bool(attributes['data-released'].value)
     @shiny_obtainable = to_bool(attributes['data-shiny-obtainable'].value)
-    @shiny_released = to_bool(attributes['data-shiny-released'].value)
+    @shiny_released   = to_bool(attributes['data-shiny-released'].value)
     @shadow_available = to_bool(attributes['data-shadow-available'].value)
-    @shadow_released = to_bool(attributes['data-shadow-released'].value)
-    @pokemon_slug = attributes['data-pokemon-slug'].value
-    @image = pokemon['style'][/https.+png/]
-    @form = parse_form(@pokemon_slug)
-    @number_with_form = "#{@dex_number}-#{standardize_form(@form)}"
+    @shadow_released  = to_bool(attributes['data-shadow-released'].value)
+    @name             = attributes['data-pokemon-slug'].value
+    @image            = pokemon['style'][/https.+png/]
+    @form             = standardize_form(parse_form(@name))
+    @number_with_form = "#{@dex_number}#{@form ? "-#{@form}" : nil}"
+  end
+
+  def list_attributes
+    [@dex_number,
+     @form,
+     @number_with_form,
+     @name,
+     @released,
+     @obtainable,
+     @nests,
+     @raid_boss,
+     @shiny_released,
+     @shiny_obtainable,
+     @shadow_released,
+     @shadow_available,
+     @image]
   end
 
   def parse_form(slug)
+    #binding.pry
     slug_arr = slug.split('-')
     if slug_arr.count() > 1
-      slug_arr.drop(1)
+      slug_arr.drop(1).join('-')
     else
       nil
     end
+  end
 
-    def standardize_form(form)
-      unless form.nil?
-        #binding.pry
-        #@silph_forms[form]
-      end
+  def standardize_form(form)
+    unless form.nil?
+      SILPH_FORMS[form]
+    else
+      nil
     end
+  end
 =begin
     burmy-plant: plant
     wormadam-plant: plant
@@ -120,5 +148,4 @@ class SilphMon < Pokemon
     exeggutor-alola: alola
     marowak-alola: alola
 =end
-  end
 end
